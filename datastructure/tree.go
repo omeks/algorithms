@@ -1,25 +1,30 @@
-package tree
+package datastructure
 
-type Node struct {
+type TreeNode struct {
 	Val   int
-	Left  *Node
-	Right *Node
+	Left  *TreeNode
+	Right *TreeNode
 }
 
-func Constructor(val int) *Node {
-	return &Node{
-		Val:   val,
-		Left:  nil,
-		Right: nil,
+func NewTreeNode(arr ...int) *TreeNode {
+	if len(arr) == 0 {
+		return &TreeNode{Val: 0, Left: nil, Right: nil}
 	}
+
+	root := &TreeNode{Val: arr[0], Left: nil, Right: nil}
+	for i := 1; i < len(arr); i++ {
+		root.Insert(arr[i])
+	}
+
+	return root
 }
 
-func (p *Node) Insert(val int) {
+func (p *TreeNode) Insert(val int) {
 	if val < p.Val {
 		if p.Left != nil {
 			p.Left.Insert(val)
 		} else {
-			p.Left = &Node{
+			p.Left = &TreeNode{
 				Val:   val,
 				Left:  nil,
 				Right: nil,
@@ -29,7 +34,7 @@ func (p *Node) Insert(val int) {
 		if p.Right != nil {
 			p.Right.Insert(val)
 		} else {
-			p.Right = &Node{
+			p.Right = &TreeNode{
 				Val:   val,
 				Left:  nil,
 				Right: nil,
@@ -38,7 +43,7 @@ func (p *Node) Insert(val int) {
 	}
 }
 
-func (p *Node) PreOrderRecursive() []int {
+func (p *TreeNode) PreOrderRecursive() []int {
 	var res []int
 	res = append(res, p.Val)
 	if p.Left != nil {
@@ -50,54 +55,10 @@ func (p *Node) PreOrderRecursive() []int {
 	return res
 }
 
-func (p *Node) InOrderRecursive() []int {
-	var res []int
-	if p.Left != nil {
-		res = append(res, p.Left.InOrderRecursive()...)
-	}
-	res = append(res, p.Val)
-	if p.Right != nil {
-		res = append(res, p.Right.InOrderRecursive()...)
-	}
-	return res
-}
-
-func (p *Node) PostOrderRecursive() []int {
-	var res []int
-	if p.Left != nil {
-		res = append(res, p.Left.PostOrderRecursive()...)
-	}
-	if p.Right != nil {
-		res = append(res, p.Right.PostOrderRecursive()...)
-	}
-	res = append(res, p.Val)
-	return res
-}
-
-func (p *Node) LevelOrderIterative() []int {
-	var res []int
-	queue := []*Node{p}
-	for len(queue) > 0 {
-		size := len(queue)
-		for i := 0; i < size; i++ {
-			node := queue[i]
-			if node.Left != nil {
-				queue = append(queue, node.Left)
-			}
-			if node.Right != nil {
-				queue = append(queue, node.Right)
-			}
-			res = append(res, node.Val)
-		}
-		queue = queue[size:]
-	}
-	return res
-}
-
-func (p *Node) PreOrderIterative() []int {
+func (p *TreeNode) PreOrderIterative() []int {
 	var (
 		res   []int
-		stack []*Node
+		stack []*TreeNode
 	)
 	node := p
 	for node != nil || len(stack) > 0 {
@@ -115,10 +76,22 @@ func (p *Node) PreOrderIterative() []int {
 	return res
 }
 
-func (p *Node) InOrderIterative() []int {
+func (p *TreeNode) InOrderRecursive() []int {
+	var res []int
+	if p.Left != nil {
+		res = append(res, p.Left.InOrderRecursive()...)
+	}
+	res = append(res, p.Val)
+	if p.Right != nil {
+		res = append(res, p.Right.InOrderRecursive()...)
+	}
+	return res
+}
+
+func (p *TreeNode) InOrderIterative() []int {
 	var (
 		res   []int
-		stack []*Node
+		stack []*TreeNode
 	)
 	node := p
 	for node != nil || len(stack) > 0 {
@@ -136,10 +109,22 @@ func (p *Node) InOrderIterative() []int {
 	return res
 }
 
-func (p *Node) PostOrderIterative() []int {
+func (p *TreeNode) PostOrderRecursive() []int {
+	var res []int
+	if p.Left != nil {
+		res = append(res, p.Left.PostOrderRecursive()...)
+	}
+	if p.Right != nil {
+		res = append(res, p.Right.PostOrderRecursive()...)
+	}
+	res = append(res, p.Val)
+	return res
+}
+
+func (p *TreeNode) PostOrderIterative() []int {
 	var (
 		res   []int
-		stack []*Node
+		stack []*TreeNode
 	)
 	node := p
 	lastVisit := p
@@ -165,10 +150,10 @@ func (p *Node) PostOrderIterative() []int {
 	return res
 }
 
-func (p *Node) PostOrderIterative2() []int {
+func (p *TreeNode) PostOrderIterative2() []int {
 	var (
 		res   []int
-		stack []*Node
+		stack []*TreeNode
 	)
 	node := p
 	for node != nil || len(stack) > 0 {
@@ -185,6 +170,26 @@ func (p *Node) PostOrderIterative2() []int {
 	}
 	for i, j := 0, len(res)-1; i < j; i, j = i+1, j-1 {
 		res[i], res[j] = res[j], res[i]
+	}
+	return res
+}
+
+func (p *TreeNode) LevelOrderIterative() []int {
+	var res []int
+	queue := []*TreeNode{p}
+	for len(queue) > 0 {
+		size := len(queue)
+		for i := 0; i < size; i++ {
+			node := queue[i]
+			if node.Left != nil {
+				queue = append(queue, node.Left)
+			}
+			if node.Right != nil {
+				queue = append(queue, node.Right)
+			}
+			res = append(res, node.Val)
+		}
+		queue = queue[size:]
 	}
 	return res
 }

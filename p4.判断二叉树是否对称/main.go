@@ -1,12 +1,10 @@
 package p4_判断二叉树是否对称
 
 import (
-	"container/list"
-
-	"github.com/omeks/algorithms/datastructure/tree"
+	"github.com/omeks/algorithms/datastructure"
 )
 
-func isSymmetric(left *tree.Node, right *tree.Node) bool {
+func isSymmetric(left *datastructure.TreeNode, right *datastructure.TreeNode) bool {
 	if left != nil && right != nil {
 		return isSymmetric(left.Left, right.Right) && isSymmetric(left.Right, right.Left)
 	}
@@ -14,7 +12,7 @@ func isSymmetric(left *tree.Node, right *tree.Node) bool {
 }
 
 // Time: O(n), Space: O(n)
-func isSymmetricTreeRecursive(root *tree.Node) bool {
+func isSymmetricTreeRecursive(root *datastructure.TreeNode) bool {
 	if root == nil {
 		return true
 	}
@@ -22,32 +20,43 @@ func isSymmetricTreeRecursive(root *tree.Node) bool {
 }
 
 // Time: O(n), Space: O(n)
-func isSymmetricTreeIterative(root *tree.Node) bool {
-	list.New()
+func isSymmetricTreeIterative(root *datastructure.TreeNode) bool {
 	if root == nil {
 		return true
 	}
-	var (
-		stack []*tree.Node
-	)
-	stack = append(stack, root.Left, root.Right)
-	for len(stack) > 0 {
-		left := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
-		right := stack[len(stack)-1]
-		stack = stack[:len(stack)-1]
+	stack := datastructure.NewStack()
+	stack.Push(root.Left)
+	stack.Push(root.Right)
+	for !stack.IsEmpty() {
+		n1 := stack.Pop()
+		n2 := stack.Pop()
 
-		if left == nil && right == nil {
+		if n1 == nil && n2 == nil {
 			continue
 		}
-		if left == nil || right == nil {
+		if n1 == nil || n2 == nil {
 			return false
 		}
 
-		stack = append(stack, left.Left)
-		stack = append(stack, right.Right)
-		stack = append(stack, left.Right)
-		stack = append(stack, right.Left)
+		left := n1.(*datastructure.TreeNode)
+		right := n2.(*datastructure.TreeNode)
+
+		if left.Val != right.Val {
+			return false
+		}
+
+		if left.Left != nil {
+			stack.Push(left.Left)
+		}
+		if right.Right != nil {
+			stack.Push(right.Right)
+		}
+		if left.Right != nil {
+			stack.Push(left.Right)
+		}
+		if right.Left != nil {
+			stack.Push(right.Left)
+		}
 	}
 	return true
 }

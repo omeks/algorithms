@@ -1,7 +1,11 @@
-package tree
+package datastructure
 
 type BinarySearchTree struct {
-	Root *Node
+	Root *TreeNode
+}
+
+func NewBinarySearchTree(arr ...int) *BinarySearchTree {
+	return &BinarySearchTree{Root: NewTreeNode(arr...)}
 }
 
 func (p *BinarySearchTree) Insert(val int) {

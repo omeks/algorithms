@@ -5,28 +5,28 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"github.com/omeks/algorithms/datastructure/tree"
+	"github.com/omeks/algorithms/datastructure"
 )
 
 func Test_isSymmetricTree(t *testing.T) {
-	root := &tree.Node{
+	root := &datastructure.TreeNode{
 		Val: 1,
-		Left: &tree.Node{
+		Left: &datastructure.TreeNode{
 			Val: 2,
-			Left: &tree.Node{
+			Left: &datastructure.TreeNode{
 				Val:   4,
 				Left:  nil,
 				Right: nil,
 			},
-			Right: &tree.Node{
+			Right: &datastructure.TreeNode{
 				Val:   8,
 				Left:  nil,
 				Right: nil,
 			},
 		},
-		Right: &tree.Node{
+		Right: &datastructure.TreeNode{
 			Val: 2,
-			Left: &tree.Node{
+			Left: &datastructure.TreeNode{
 				Val:   8,
 				Left:  nil,
 				Right: nil,
@@ -35,7 +35,7 @@ func Test_isSymmetricTree(t *testing.T) {
 	}
 	assert.Equal(t, false, isSymmetricTreeIterative(root))
 	assert.Equal(t, false, isSymmetricTreeRecursive(root))
-	root.Right.Right = &tree.Node{
+	root.Right.Right = &datastructure.TreeNode{
 		Val:   4,
 		Left:  nil,
 		Right: nil,

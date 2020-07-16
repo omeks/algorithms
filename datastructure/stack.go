@@ -1,4 +1,4 @@
-package stack
+package datastructure
 
 import (
 	"sync"
@@ -16,22 +16,27 @@ type (
 	}
 )
 
-// Create a new stack
-func NewStack() *Stack {
-	return &Stack{nil, 0, &sync.RWMutex{}}
+func NewStack(arr ...int) *Stack {
+	if len(arr) == 0 {
+		return &Stack{nil, 0, &sync.RWMutex{}}
+	}
+
+	stack := &Stack{&node{value: arr[0]}, 1, &sync.RWMutex{}}
+	for i := 1; i < len(arr); i++ {
+		stack.Push(arr[i])
+	}
+
+	return stack
 }
 
-// Return the number of items in the stack
 func (this *Stack) Len() int {
 	return this.length
 }
 
-// Return the number of items in the stack
-func (this *Stack) Empty() bool {
+func (this *Stack) IsEmpty() bool {
 	return this.length == 0
 }
 
-// View the top item on the stack
 func (this *Stack) Peek() interface{} {
 	if this.length == 0 {
 		return nil
@@ -39,7 +44,6 @@ func (this *Stack) Peek() interface{} {
 	return this.top.value
 }
 
-// Push a value onto the top of the stack
 func (this *Stack) Push(value interface{}) {
 	this.lock.Lock()
 	defer this.lock.Unlock()
@@ -48,7 +52,6 @@ func (this *Stack) Push(value interface{}) {
 	this.length++
 }
 
-// Pop the top item of the stack and return it
 func (this *Stack) Pop() interface{} {
 	this.lock.Lock()
 	defer this.lock.Unlock()
